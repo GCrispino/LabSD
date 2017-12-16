@@ -139,4 +139,14 @@ public class Populacao {
         return this.acabou;
     }
 
+    public Cromossomo getElemMaxFitness() {
+        return elemMaxFitness;
+    }
+
+    @Override
+    public String toString() {
+        return "Populacao{" +
+                "cromossomos=\n" + cromossomos +
+                '}';
+    }
 }

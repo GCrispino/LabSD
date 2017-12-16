@@ -117,4 +117,14 @@ public class Cromossomo {
     public int getFitness() {
         return fitness;
     }
+
+    @Override
+    public String toString() {
+        return "Cromossomo{" +
+                "nRainhas=" + nRainhas +
+                ", txMutacao=" + txMutacao +
+                ", genotipo=" + genotipo +
+                ", fitness=" + fitness +
+                "}\n";
+    }
 }
