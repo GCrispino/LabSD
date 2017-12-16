@@ -30,13 +30,13 @@ public class Cromossomo {
 
     public void calcularFitness(){
         //array que tem elemento igual a 1 quando a rainha dessa linha est� em xeque
-        int rainhasXeque[] = new int[this.n];
-        int nRainhasXeque;
+        int rainhasXeque[] = new int[this.nRainhas];
+        int nRainhasXeque = 0;
 
-        for (let i = 0;i < this.n - 1;++i){
-            for (let j = i + 1;j < this.n;++j){
+        for (int i = 0;i < this.nRainhas - 1;++i){
+            for (int j = i + 1;j < this.nRainhas;++j){
                 //verifica se compartilham de uma mesma diagonal
-                let emXeque = 
+                boolean emXeque =
                         i - this.genotipo.get(i) == j - this.genotipo.get(j)
                                             ||
                         i + this.genotipo.get(i) == j + this.genotipo.get(j);
@@ -56,12 +56,12 @@ public class Cromossomo {
         }
         // nRainhasXeque = (rainhasXeque.filter(x => x == 1)).length;
 
-        this.fitness = (this.n - nRainhasXeque);
+        this.fitness = (this.nRainhas - nRainhasXeque);
     }
 
     public void mutacao(){
-        int pos1 = Math.floor(Math.random() * this.n),
-            pos2 = Math.floor(Math.random() * this.n);
+        int pos1 = (int) Math.floor(Math.random() * this.nRainhas),
+            pos2 = (int) Math.floor(Math.random() * this.nRainhas);
 
         int genotipoPos1 = this.genotipo.get(pos1),
             genotipoPos2 = this.genotipo.get(pos2);
@@ -76,7 +76,7 @@ public class Cromossomo {
     //realiza a opera��o de muta��o probabilisticamente em um array de cromossomos
     public void mutaFilhos(Cromossomo filhos []){
         for (Cromossomo filho : filhos) {
-            float probMutacao = Math.random();
+            double probMutacao = Math.random();
 
             if (probMutacao < filho.txMutacao)
                 filho.mutacao();		
@@ -86,25 +86,25 @@ public class Cromossomo {
     //crossover de dois pontos
     public Cromossomo[] crossover(Cromossomo outroCromossomo){
         
-        Cromossomo filho1 = new Cromossomo(this.n,this.txMutacao),
-                   filho2 = new Cromossomo(this.n,this.txMutacao),
+        Cromossomo filho1 = new Cromossomo(this.nRainhas,this.txMutacao),
+                   filho2 = new Cromossomo(this.nRainhas,this.txMutacao),
                    filhos[] = {filho1,filho2};
         
-        int pontoCrossover = Math.floor(Math.random() * this.n);
+        int pontoCrossover = (int) Math.floor(Math.random() * this.nRainhas);
 
         //primeira parte
-        for (let i = 0;i <= pontoCrossover;++i){
-            filho1.genotipo.push(this.genotipo.get(i));
-            filho2.genotipo.push(outroCromossomo.genotipo.get(i));
+        for (int i = 0;i <= pontoCrossover;++i){
+            filho1.genotipo.add(this.genotipo.get(i));
+            filho2.genotipo.add(outroCromossomo.genotipo.get(i));
         }
 
         //segunda parte
-        for (let i = 0;i < this.n;++i){
-            if ( filho1.genotipo.indexOf(outroCromossomo.genotipo.get(i)) === -1)
-                filho1.genotipo.push(outroCromossomo.genotipo.get(i));
+        for (int i = 0;i < this.nRainhas;++i){
+            if ( filho1.genotipo.indexOf(outroCromossomo.genotipo.get(i)) == -1)
+                filho1.genotipo.add(outroCromossomo.genotipo.get(i));
 
-            if ( filho2.genotipo.indexOf(this.genotipo.get(i)) === -1)
-                filho2.genotipo.push(this.genotipo.get(i));
+            if ( filho2.genotipo.indexOf(this.genotipo.get(i)) == -1)
+                filho2.genotipo.add(this.genotipo.get(i));
         }
 
         //realiza a operação de mutação probabilisticamente nos filhos
@@ -114,4 +114,7 @@ public class Cromossomo {
         return filhos;
     }
 
+    public int getFitness() {
+        return fitness;
+    }
 }

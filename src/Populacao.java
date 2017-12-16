@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class Populacao {
 
-
     private int tamanho;
     private int nRainhas;
     private float txMutacao;
@@ -32,9 +31,9 @@ public class Populacao {
     public void calcularFitness(){
         for (Cromossomo c: this.cromossomos){
             c.calcularFitness();
-            int fitness = c.fitness;
+            int fitness = c.getFitness();
 
-            if (this.elemMaxFitness == null || fitness > this.elemMaxFitness.fitness){
+            if (this.elemMaxFitness == null || fitness > this.elemMaxFitness.getFitness()){
                 this.elemMaxFitness = c;
 
                 if (fitness == this.nRainhas)
@@ -45,7 +44,7 @@ public class Populacao {
 
     public Cromossomo[] selecaoPais(){
         ArrayList<Cromossomo> pais = new ArrayList<>();
-        int indiceMelhor,indiceSegundoMelhor;
+        int indiceMelhor = 0, indiceSegundoMelhor = 0;
 
         int i = 0;
         while(pais.size() != 5){
@@ -102,7 +101,7 @@ public class Populacao {
     }
 
     public void selecaoSobreviventes(Cromossomo filhos[]){
-        int indicePior,indiceSegundoPior;
+        int indicePior = 0,indiceSegundoPior = 0;
 
         //acha os dois piores indivíduos da população
         for (int i = 0; i < cromossomos.size(); i++){
