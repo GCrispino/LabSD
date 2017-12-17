@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Populacao {
 
@@ -36,8 +37,9 @@ public class Populacao {
             if (this.elemMaxFitness == null || fitness > this.elemMaxFitness.getFitness()){
                 this.elemMaxFitness = c;
 
-                if (fitness == this.nRainhas)
+                if (fitness == this.nRainhas) {
                     this.acabou = true;
+                }
             }
         }
     }
@@ -45,6 +47,8 @@ public class Populacao {
     public Cromossomo[] selecaoPais(){
         ArrayList<Cromossomo> pais = new ArrayList<>();
         int indiceMelhor = 0, indiceSegundoMelhor = 0;
+
+        Random rGen = new Random();
 
         int i = 0;
         while(pais.size() != 5){
@@ -54,7 +58,8 @@ public class Populacao {
 
 
             do{
-                index = (int)Math.floor(Math.random() * this.tamanho);
+                //index = (int)Math.floor(Math.random() * this.tamanho);
+                index = rGen.nextInt(this.tamanho);
                 rand = this.cromossomos.get(index);
                 // console.log("RAND: ",rand);
             }while(pais.indexOf(rand) != -1);
@@ -127,12 +132,9 @@ public class Populacao {
             }
         }
 
-        Cromossomo pior = this.cromossomos.get(indicePior),
-                   segundoPior = this.cromossomos.get(indiceSegundoPior);
+        this.cromossomos.set(indicePior,filhos[0]);
+        this.cromossomos.set(indiceSegundoPior,filhos[1]);
 
-        //substitui os dois piores indivíduos da população pelo par de filhos
-        pior = filhos[0];
-        segundoPior = filhos[1];
     }
 
     public boolean verificarParada(){
@@ -146,7 +148,7 @@ public class Populacao {
     @Override
     public String toString() {
         return "Populacao{" +
-                "cromossomos=\n" + cromossomos +
+                "cromossomos=\n" + this.cromossomos +
                 '}';
     }
 }

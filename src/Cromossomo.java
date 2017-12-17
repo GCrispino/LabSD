@@ -1,15 +1,19 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Cromossomo {
     private int nRainhas;
     private float txMutacao;
     private ArrayList<Integer> genotipo;
     private int fitness;
+    private Random rGen;
 
     public Cromossomo(int nRainhas,float txMutacao){
         this.nRainhas = nRainhas;
         this.txMutacao = txMutacao;
         this.genotipo = new ArrayList<>();
+
+        this.rGen = new Random();
     }
 
     //inicializa��o do gen�tipo
@@ -20,7 +24,8 @@ public class Cromossomo {
             colunas.add(i);
 
         for (int i = 0;i < this.nRainhas;++i){
-            int nColuna = (int)Math.floor(Math.random() * (this.nRainhas - i));
+            //int nColuna = (int)Math.floor(Math.random() * (this.nRainhas - i));
+            int nColuna = this.rGen.nextInt(this.nRainhas - i);
 
             this.genotipo.add(colunas.get(nColuna));
             //remove elemento do array
@@ -60,8 +65,10 @@ public class Cromossomo {
     }
 
     public void mutacao(){
-        int pos1 = (int) Math.floor(Math.random() * this.nRainhas),
-            pos2 = (int) Math.floor(Math.random() * this.nRainhas);
+        //int pos1 = (int) Math.floor(Math.random() * this.nRainhas),
+        //    pos2 = (int) Math.floor(Math.random() * this.nRainhas);
+        int pos1 = this.rGen.nextInt(this.nRainhas),
+            pos2 = this.rGen.nextInt(this.nRainhas);
 
         int genotipoPos1 = this.genotipo.get(pos1),
             genotipoPos2 = this.genotipo.get(pos2);
@@ -69,14 +76,15 @@ public class Cromossomo {
 
         //troca
         int aux = genotipoPos1;
-        genotipoPos1 = genotipoPos2;
-        genotipoPos2 = aux;
+        this.genotipo.set(pos1,genotipoPos2);
+        this.genotipo.set(pos2,aux);
     }
 
     //realiza a opera��o de muta��o probabilisticamente em um array de cromossomos
     public void mutaFilhos(Cromossomo filhos []){
         for (Cromossomo filho : filhos) {
-            double probMutacao = Math.random();
+            //double probMutacao = Math.random();
+            double probMutacao = this.rGen.nextDouble();
 
             if (probMutacao < filho.txMutacao)
                 filho.mutacao();		
@@ -90,7 +98,8 @@ public class Cromossomo {
                    filho2 = new Cromossomo(this.nRainhas,this.txMutacao),
                    filhos[] = {filho1,filho2};
         
-        int pontoCrossover = (int) Math.floor(Math.random() * this.nRainhas);
+        //int pontoCrossover = (int) Math.floor(Math.random() * this.nRainhas);
+        int pontoCrossover = this.rGen.nextInt(this.nRainhas);
 
         //primeira parte
         for (int i = 0;i <= pontoCrossover;++i){
@@ -108,7 +117,7 @@ public class Cromossomo {
         }
 
         //realiza a operação de mutação probabilisticamente nos filhos
-        this.mutaFilhos(filhos);
+        //this.mutaFilhos(filhos);
         
 
         return filhos;
