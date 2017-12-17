@@ -9,6 +9,7 @@ public class Populacao {
     private ArrayList<Cromossomo> cromossomos;
     private Cromossomo elemMaxFitness;
     private boolean acabou;
+    private final int N_THREADS = 3;
 
     public Populacao(int tamanho,int nRainhas,float txMutacao){
         this.tamanho = tamanho;
@@ -29,7 +30,31 @@ public class Populacao {
         }
     }
 
-    public void calcularFitness(){
+    public void calcularFitness(boolean paralelo) {
+
+        if (paralelo) {
+            int nCromossomos = this.cromossomos.size(),
+                    nCromossomosPorThread = (int) Math.round((double) nCromossomos / this.N_THREADS);
+
+            Thread threads[] = new Thread[this.N_THREADS];
+            CalculaFitness c[] = new CalculaFitness[this.N_THREADS];
+
+            for (int i = 0; i < N_THREADS; ++i) {
+                int iComeco = i * nCromossomosPorThread, iFim = iComeco + nCromossomosPorThread;
+                threads[i] = new Thread(new CalculaFitness(this, this.cromossomos, iComeco, iFim));
+                threads[i].start();
+            }
+
+            for (int i = 0; i < N_THREADS; ++i)
+                try {
+                    threads[i].join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return;
+        }
+
+
         for (Cromossomo c: this.cromossomos){
             c.calcularFitness();
             int fitness = c.getFitness();
@@ -42,7 +67,7 @@ public class Populacao {
                 }
             }
         }
-    }
+}
 
     public Cromossomo[] selecaoPais(){
         ArrayList<Cromossomo> pais = new ArrayList<>();
@@ -141,9 +166,15 @@ public class Populacao {
         return this.acabou;
     }
 
+    public void setAcabou(){this.acabou = true;}
+
     public Cromossomo getElemMaxFitness() {
         return elemMaxFitness;
     }
+
+    public void setElemMaxFitness(Cromossomo c){this.elemMaxFitness = c;}
+
+    public int getnRainhas(){return this.nRainhas;}
 
     @Override
     public String toString() {
