@@ -1,3 +1,4 @@
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -86,8 +87,10 @@ public class Cromossomo {
             //double probMutacao = Math.random();
             double probMutacao = this.rGen.nextDouble();
 
-            if (probMutacao < filho.txMutacao)
-                filho.mutacao();		
+            if (probMutacao < filho.txMutacao) {
+                filho.mutacao();
+            }
+
         }
     }
 
@@ -117,7 +120,7 @@ public class Cromossomo {
         }
 
         //realiza a operação de mutação probabilisticamente nos filhos
-        //this.mutaFilhos(filhos);
+        this.mutaFilhos(filhos);
         
 
         return filhos;
