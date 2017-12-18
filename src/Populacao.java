@@ -69,15 +69,13 @@ public class Populacao {
     }
 
     public Cromossomo[] selecaoPais2() {
-
-        List<Integer> absoluteFitness = new ArrayList<>();
         List<Double> proportionalFitness = new ArrayList<>();
 
         double totalFitness = 0;
 
         for (Cromossomo i : this.cromossomos) {
             totalFitness += i.getFitness();
-            absoluteFitness.add(i.getFitness());
+            proportionalFitness.add(i.getFitness() / totalFitness);
         }
 
         List<Cromossomo> parents = new ArrayList<>();
@@ -88,10 +86,6 @@ public class Populacao {
                     this.cromossomos.get(1)
             };
             return paisSelecionados;
-        }
-
-        for (int i : absoluteFitness) {
-            proportionalFitness.add(i / totalFitness);
         }
 
         while (parents.size() < 2) {
