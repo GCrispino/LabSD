@@ -224,7 +224,7 @@ public class Populacao {
         return meanFitness;
     }
 
-    public void addMeanFitness(double fitness){
+    public void addMeanFitness(double fitness) {
         this.meanFitness = fitness / this.cromossomos.size();
     }
 }
