@@ -78,7 +78,7 @@ public class Cromossomo {
         //troca
         int aux = genotipoPos1;
         this.genotipo.set(pos1,genotipoPos2);
-        this.genotipo.set(pos2,aux);
+        this.genotipo.set(pos2,aux);//this.rGen.nextInt(nRainhas)
     }
 
     //realiza a opera��o de muta��o probabilisticamente em um array de cromossomos

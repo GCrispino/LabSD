@@ -7,6 +7,7 @@ public class Populacao {
     private float txMutacao;
     private ArrayList<Cromossomo> cromossomos;
     private Cromossomo elemMaxFitness;
+    private double meanFitness = 0;
     private boolean acabou;
     private final int N_THREADS = 3;
 
@@ -53,7 +54,6 @@ public class Populacao {
             return;
         }
 
-
         for (Cromossomo c : this.cromossomos) {
             c.calcularFitness();
             int fitness = c.getFitness();
@@ -65,7 +65,9 @@ public class Populacao {
                     this.acabou = true;
                 }
             }
+            meanFitness += fitness;
         }
+        meanFitness /= this.cromossomos.size();
     }
 
     public Cromossomo[] selecaoPais2() {
@@ -216,5 +218,13 @@ public class Populacao {
         return "Populacao{" +
                 "cromossomos=\n" + this.cromossomos +
                 '}';
+    }
+
+    public double getMeanFitness() {
+        return meanFitness;
+    }
+
+    public void addMeanFitness(double fitness){
+        this.meanFitness = fitness / this.cromossomos.size();
     }
 }

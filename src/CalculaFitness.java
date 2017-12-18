@@ -23,13 +23,14 @@ public class CalculaFitness implements Runnable{
 
             c.calcularFitness();
             int fitness = c.getFitness();
-
+            populacao.addMeanFitness(fitness);
             if (elemMaxFitness == null || fitness > elemMaxFitness.getFitness()){
                 this.populacao.setElemMaxFitness(c);
 
                 if (fitness == this.populacao.getnRainhas())
                     this.populacao.setAcabou();
             }
+
         }
     }
 }
