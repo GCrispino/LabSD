@@ -2,7 +2,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Populacao p = new Populacao(80, 150, 0.8f);
+        Populacao p = new Populacao(80, 25, 0.8f);
         int i = 0, nGeracoes = 1000000, preso = 0;
         boolean calculaFitnessParalelo = true;
         double lastMean = 0;
@@ -25,7 +25,7 @@ public class Main {
 
             lastMean = p.getMeanFitness();
 
-            p.calcularFitness(calculaFitnessParalelo);
+            p.calcularFitnessSocket();
             if (i % 1000 == 0) {
                 System.out.println(i + " -- " + p.getElemMaxFitness().getFitness() + " | mean - " + (p.getMeanFitness() - lastMean) + " | " + preso);
             }

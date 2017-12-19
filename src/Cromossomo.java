@@ -18,6 +18,25 @@ public class Cromossomo {
         fitness = -1;
     }
 
+    public Cromossomo(String cromossomo) {
+        String[] parameters = cromossomo.split(":");
+        for (String p : parameters) {
+            String[] keyparam = p.split("=");
+            if (keyparam[0].equals("n")) {
+                this.nRainhas = Integer.parseInt(keyparam[1]);
+            } else if (keyparam[0].equals("g")) {
+                String array = keyparam[1].substring(1, keyparam[1].length() - 1);
+                String[] values = array.split(", ");
+                this.genotipo = new ArrayList<>();
+                for (String v : values) {
+                    genotipo.add(Integer.parseInt(v));
+                }
+            }
+        }
+        //n=150:g=[99, 77, 51, 26, 53, 75, 135, 139, 105, 60, 14, 85, 133, 106, 116, 7, 0, 23, 50, 130, 40, 62, 96, 4, 122, 38, 126, 17, 47, 16, 143, 111, 73, 141, 52, 36, 55, 21, 15, 128, 79, 9, 120, 67, 148, 18, 33, 76, 147, 98, 137, 90, 25, 134, 20, 124, 117, 109, 129, 56, 66, 24, 43, 113, 44, 131, 64, 54, 136, 80, 103, 149, 61, 146, 125, 112, 39, 81, 88, 31, 115, 3, 87, 95, 127, 82, 28, 63, 8, 34, 11, 83, 46, 94, 132, 142, 140, 30, 118, 71, 144, 6, 13, 27, 12, 108, 121, 69, 92, 104, 32, 37, 10, 65, 2, 74, 42, 107, 59, 41, 57, 45, 89, 72, 5, 100, 97, 68, 119, 101, 123, 70, 22, 58, 86, 91, 1, 19, 110, 84, 48, 78, 29, 49, 145, 114, 35, 102, 93, 138]
+
+    }
+
     //inicializa��o do gen�tipo
     public void inicializar() {
         ArrayList<Integer> colunas = new ArrayList<>();
@@ -127,6 +146,10 @@ public class Cromossomo {
         return filhos;
     }
 
+    public void setFitness(int fitness) {
+        this.fitness = fitness;
+    }
+
     public int getFitness() {
         return fitness;
     }
@@ -139,5 +162,9 @@ public class Cromossomo {
                 ", genotipo=" + genotipo +
                 ", fitness=" + fitness +
                 "}\n";
+    }
+
+    public String toSend() {
+        return "n=" + nRainhas + ":g=" + genotipo;
     }
 }

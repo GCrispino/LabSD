@@ -1,3 +1,7 @@
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.*;
 
 public class Populacao {
@@ -10,6 +14,7 @@ public class Populacao {
     private double meanFitness = 0;
     private boolean acabou;
     private final int N_THREADS = 3;
+    Socket cliente;
 
     public Populacao(int tamanho, int nRainhas, float txMutacao) {
         this.tamanho = tamanho;
@@ -20,6 +25,7 @@ public class Populacao {
         this.elemMaxFitness = null;
 
         this.acabou = false;
+        cliente = connect();
     }
 
     public void inicializacao() {
@@ -27,6 +33,38 @@ public class Populacao {
             Cromossomo cromossomo = new Cromossomo(this.nRainhas, this.txMutacao);
             cromossomo.inicializar();
             this.cromossomos.add(cromossomo);
+        }
+    }
+
+    public void calcularFitnessSocket() {
+        for (Cromossomo c : this.cromossomos) {
+            int fitness;
+            if((fitness = c.getFitness()) == -1) {
+                sendStringToServer(cliente, "calculateFitness");
+                sendStringToServer(cliente, c.toSend());
+
+                fitness = Integer.parseInt(readStringFromServer(cliente));
+                c.setFitness(fitness);
+            }
+            if (this.elemMaxFitness == null || fitness > this.elemMaxFitness.getFitness()) {
+                this.elemMaxFitness = c;
+
+                if (fitness == this.nRainhas) {
+                    this.acabou = true;
+                }
+            }
+            meanFitness += fitness;
+        }
+        meanFitness /= this.cromossomos.size();
+    }
+
+    private static Socket connect(){
+        try{
+            return new Socket("127.0.0.1",50505);
+        }
+        catch (Exception e){
+            System.out.println("Erro: " + e.getMessage());
+            return null;
         }
     }
 
@@ -226,5 +264,25 @@ public class Populacao {
 
     public void addMeanFitness(double fitness) {
         this.meanFitness = fitness / this.cromossomos.size();
+    }
+
+    private static void sendStringToServer(Socket cliente, String msg){
+        try {
+            ObjectOutputStream saida = new ObjectOutputStream(cliente.getOutputStream());
+            saida.writeUTF(msg);
+            saida.flush();
+        } catch (IOException e) {
+            System.out.println("Erro: " + e.getMessage());
+        }
+    }
+
+    private static String readStringFromServer(Socket cliente){
+        try {
+            ObjectInputStream entrada = new ObjectInputStream(cliente.getInputStream());
+            return entrada.readUTF();
+        } catch (IOException e) {
+            System.out.println("Erro: " + e.getMessage());
+            return "";
+        }
     }
 }
