@@ -1,8 +1,8 @@
-import javax.jws.soap.SOAPBinding;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Cromossomo {
+public class Cromossomo implements Serializable{
     private int nRainhas;
     private float txMutacao;
     private ArrayList<Integer> genotipo;

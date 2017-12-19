@@ -1,6 +1,9 @@
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-public class Populacao {
+public class PopulacaoImpl extends UnicastRemoteObject implements Populacao{
 
     private int tamanho;
     private int nRainhas;
@@ -11,7 +14,7 @@ public class Populacao {
     private boolean acabou;
     private final int N_THREADS = 3;
 
-    public Populacao(int tamanho, int nRainhas, float txMutacao) {
+    public PopulacaoImpl(int tamanho, int nRainhas, float txMutacao) throws RemoteException{
         this.tamanho = tamanho;
         this.nRainhas = nRainhas;
         this.txMutacao = txMutacao;
@@ -31,7 +34,7 @@ public class Populacao {
     }
 
     public void calcularFitness(boolean paralelo) {
-
+/*
         if (paralelo) {
             int nCromossomos = this.cromossomos.size(),
                     nCromossomosPorThread = (int) Math.round((double) nCromossomos / this.N_THREADS);
@@ -67,7 +70,7 @@ public class Populacao {
             }
             meanFitness += fitness;
         }
-        meanFitness /= this.cromossomos.size();
+        meanFitness = (double)meanFitness /this.cromossomos.size();*/
     }
 
     public Cromossomo[] selecaoPais2() {
@@ -213,9 +216,8 @@ public class Populacao {
         return this.nRainhas;
     }
 
-    @Override
-    public String toString() {
-        return "Populacao{" +
+    public String imprime() {
+        return "PopulacaoImpl{" +
                 "cromossomos=\n" + this.cromossomos +
                 '}';
     }
@@ -226,5 +228,9 @@ public class Populacao {
 
     public void addMeanFitness(double fitness) {
         this.meanFitness = fitness / this.cromossomos.size();
+    }
+
+    public ArrayList<Cromossomo> getCromossomos() {
+        return this.cromossomos;
     }
 }
